@@ -1,0 +1,50 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+
+using namespace std;
+
+// Функция, определяющая правую часть дифференциального уравнения
+double f(double x, double y) {
+  return -2 * x * y + x * exp(-x * x);
+}
+
+// Метод Эйлера-Коши
+double euler_method(double x0, double y0, double h, double xn) {
+  double x = x0;
+  double y = y0;
+
+  while (x < xn) {
+    y += h * f(x, y);
+    x += h;
+  }
+
+  return y;
+}
+
+// Точное решение
+double exact_solution(double x) {
+  return (exp(-x * x) * x * x) / 2;
+}
+
+int main() {
+  // Параметры задачи
+  double x0 = 0;
+  double y0 = 0;
+  double h = 0.1;
+  double xn = 1;
+
+  // Вычисление приближенного и точного решения
+  double x = x0;
+  cout << "x_i | y_i (приближенное) | y_i (точное) | Разность" << endl;
+  cout << "---|---|---|---" << endl;
+
+  while (x <= xn) {
+    double y_euler = euler_method(x0, y0, h, x);
+    double y_exact = exact_solution(x);
+    cout << fixed << setprecision(4) << x << " | " << y_euler << " | " << y_exact << " | " << abs(y_euler - y_exact) << endl;
+    x += h;
+  }
+
+  return 0;
+}
